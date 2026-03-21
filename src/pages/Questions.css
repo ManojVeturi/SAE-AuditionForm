@@ -1,0 +1,108 @@
+.questions-page {
+  padding: 2.5rem 1.5rem;
+}
+
+.questions-back-btn {
+  background-color: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.questions-back-btn:hover {
+  color: white;
+}
+
+.questions-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.questions-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.questions-subtitle {
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+}
+
+.questions-error {
+  background-color: rgba(229, 9, 20, 0.1);
+  border: 1px solid var(--color-primary);
+  color: white;
+  padding: 0.875rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+.questions-panel {
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.questions-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border-color);
+  padding-bottom: 1rem;
+}
+
+.questions-number-circle {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.questions-domain-title {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.questions-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.questions-label {
+  font-size: 1.05rem;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+
+.questions-textarea {
+  resize: vertical;
+}
+
+.questions-submit-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.5rem;
+}
+
+.questions-submit-btn {
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  border-radius: 9999px;
+}
