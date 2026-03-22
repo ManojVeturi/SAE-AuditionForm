@@ -1,35 +1,51 @@
 .app-header {
-  padding: 1rem 2rem;
+  padding: 10px 20px;
   border-bottom: 1px solid var(--color-border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(10, 10, 10, 0.85); /* Darker for better contrast */
+  background-color: rgba(10, 10, 10, 0.85);
+  /* Darker for better contrast */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); /* Clear separation from background */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  /* Clear separation from background */
 }
 
 .app-logo-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
+
+/* .app-logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+  display: block;
+  /* Making it look like an app badge instead of a raw picture 
+  padding: 0.35rem;
+  background-color: rgba(23, 23, 23, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* Ensures dark logos pop 
+} */
 
 .app-logo {
   width: 3.25rem;
   height: 3.25rem;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15)); /* Ensures dark logos pop */
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.15));
+  /* Ensures dark logos pop */
 }
 
 .app-title {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.25rem;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -40,7 +56,7 @@
 .app-title-span {
   font-weight: 400;
   color: var(--color-primary);
-  margin-left: 0.4rem;
+  margin-left: 0.35rem;
 }
 
 .user-profile {

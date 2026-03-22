@@ -10,38 +10,61 @@ import Success from './pages/Success/Success';
 import AdminLogin from './pages/AdminLogin/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
 import './App.css';
+import SplashScreen from "./components/SplashScreen";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [splashMinTimePassed, setSplashMinTimePassed] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
 
+  // 1. Min time for splash screen to ensure it's fully seen
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSplashMinTimePassed(true);
+    }, 2500); // 2.5 seconds minimum
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 2. Auth checking
   useEffect(() => {
     if (!auth) {
-      setLoading(false);
+      setAuthLoading(false);
       return;
     }
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
+      setAuthLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <h2 className="text-primary font-display">Loading...</h2>
-      </div>
-    );
+  const isReady = !authLoading && splashMinTimePassed;
+
+  // 3. Trigger exit animation
+  useEffect(() => {
+    if (isReady) {
+      // Allow the zoom out animation to play for 800ms before unmounting
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isReady]);
+
+  if (showSplash) {
+    return <SplashScreen finishLoading={isReady} />;
   }
 
   return (
     <BrowserRouter>
       <div className="app-container">
         <header className="app-header">
-          <div className="app-logo-container">
+          <div className="app-logo-container" style={{ textDecoration: 'none' }}>
             <img src="/saelogo.png" alt="SAE Logo" className="app-logo" />
-            <h1 className="app-title font-display font-bold">SAE <span className="text-primary app-title-span">AUDITION</span></h1>
+            <h1 className="app-title font-display font-bold">
+              SAE <span className="text-primary app-title-span">AUDITION</span>
+            </h1>
           </div>
           {user && (
             <div className="user-profile">
@@ -49,6 +72,7 @@ function App() {
               <img src={user.photoURL || `https://ui-avatars.com/api/?name=${user.email}`} alt="avatar" className="user-avatar" />
             </div>
           )}
+
         </header>
 
         <main>
