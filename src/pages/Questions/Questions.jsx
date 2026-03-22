@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Navigate } from 'react-router-dom';
-import { collection, addDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
 import { Send, AlertCircle, ChevronLeft } from 'lucide-react';
 import { DOMAIN_QUESTIONS } from '../../data/questions';
@@ -84,20 +84,23 @@ export default function Questions() {
         }, { merge: true })
       ]);
 
-      // 🔥 SEND TO GOOGLE SHEETS (NEW PART)
+      const userDoc = await getDoc(doc(db, "users", userId));
+      const userData = userDoc.data() || {};
+
+      // 🔥 SEND TO GOOGLE SHEETS
       for (const domainId of selectedDomains) {
         const domainData = answers[domainId] || {};
         const answersStr = Object.values(domainData).join(" | ");
 
         await sendToSheets({
           domain: domainId,
-          name: userDetails?.name || "",
+          name: userData.name || "",
           email: userEmail,
-          rollNo: userDetails?.rollNo || "",
-          whatsapp: userDetails?.whatsapp || "",
-          year: userDetails?.year || "",
-          gender: userDetails?.gender || "",
-          branch: userDetails?.branch || "",
+          rollNo: userData.rollNo || "",
+          whatsapp: userData.whatsapp || "",
+          year: userData.year || "",
+          gender: userData.gender || "",
+          branch: userData.branch || "",
           allDomains: selectedDomains.join(" | "),
           answers: answersStr
         });
