@@ -2,17 +2,48 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
-import { Monitor, PenTool, Calendar, Settings, Link, ArrowRight, AlertCircle } from 'lucide-react';
+import { Monitor, PenTool, Calendar, Settings, Cpu, Brain, ArrowRight, AlertCircle } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 
 import './DomainSelection.css';
 
 const availableDomains = [
-  { id: 'web_development', title: 'Web Development', desc: 'Build the digital interface of tomorrow.', icon: Monitor },
-  { id: 'graphic_designing', title: 'Graphic Design & Video Editing', desc: 'Bring ideas to life with visual storytelling.', icon: PenTool },
-  { id: 'event_management', title: 'Event Management', desc: 'Orchestrate chaos into unforgettable experiences.', icon: Calendar },
-  { id: 'automobile', title: 'Automobile', desc: 'Engineer and build machines that move us.', icon: Settings },
-  { id: 'robotics', title: 'Robotics / ML', desc: 'Automate and train the intelligent future.', icon: Link },
+  {
+    id: 'web_development',
+    title: 'Web Development',
+    desc: 'Build the digital interface of tomorrow.',
+    icon: Monitor
+  },
+  {
+    id: 'graphic_designing',
+    title: 'Graphic Design & Video Editing',
+    desc: 'Bring ideas to life with visual storytelling.',
+    icon: PenTool
+  },
+  {
+    id: 'event_management',
+    title: 'Event Management',
+    desc: 'Orchestrate chaos into unforgettable experiences.',
+    icon: Calendar
+  },
+  {
+    id: 'automobile',
+    title: 'Automobile',
+    desc: 'Engineer and build machines that move us.',
+    icon: Settings
+  },
+  {
+    id: 'robotics',
+    title: 'Robotics',
+    desc: 'Design and build intelligent machines and systems.',
+    icon: Cpu
+  },
+  {
+    id: 'machine_learning',
+    title: 'Machine Learning / AI',
+    desc: 'Train models and build intelligent decision systems.',
+    icon: Brain
+  }
 ];
 
 export default function DomainSelection() {

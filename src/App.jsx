@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
-
 import Login from './pages/Login/Login';
 import UserDetails from './pages/UserDetails/UserDetails';
 import DomainSelection from './pages/DomainSelection/DomainSelection';
@@ -10,7 +9,6 @@ import Questions from './pages/Questions/Questions';
 import Success from './pages/Success/Success';
 import AdminLogin from './pages/AdminLogin/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
-
 import SplashScreen from "./components/SplashScreen";
 import './App.css';
 
@@ -69,7 +67,7 @@ function App() {
         <div className="app-logo-container" style={{ textDecoration: 'none' }}>
           <img src="/saelogo.png" alt="SAE Logo" className="app-logo" />
           <h1 className="app-title font-display font-bold">
-            SAE <span className="text-primary app-title-span">AUDITION</span>
+            SAE <span className="text-primary app-title-span">AUDITION </span> 2026
           </h1>
         </div>
 
