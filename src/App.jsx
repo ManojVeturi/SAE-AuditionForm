@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
+import { useNavigate } from "react-router-dom";
 import Login from './pages/Login/Login';
 import UserDetails from './pages/UserDetails/UserDetails';
 import DomainSelection from './pages/DomainSelection/DomainSelection';
@@ -17,6 +18,7 @@ function App() {
   const [authLoading, setAuthLoading] = useState(true);
   const [splashMinTimePassed, setSplashMinTimePassed] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const navigate = useNavigate();
 
   // 1. Min time for splash screen to ensure it's fully seen
   useEffect(() => {
@@ -72,7 +74,14 @@ function App() {
               <img src={user.photoURL || `https://ui-avatars.com/api/?name=${user.email}`} alt="avatar" className="user-avatar" />
             </div>
           )}
-
+          <div>
+            <button 
+              onClick={() => navigate("/admin")}
+              className="btn-secondary flex items-center gap-2 px-4 py-2.5"
+            >
+              Admin Login
+            </button>
+          </div>
         </header>
 
         <main>
