@@ -19,9 +19,16 @@ export const DOMAIN_QUESTIONS = {
   graphic_designing: {
     title: 'Graphic Design & Video Editing',
     questions: [
-      { id: 'q1', type: 'text', text: 'Which software do you use? (e.g. Premiere Pro, After Effects, Illustrator)' },
-      { id: 'q2', type: 'textarea', text: 'What is your primary design style?' },
-      { id: 'q3', type: 'url', text: 'Link to your Behance, Dribbble, or Drive portfolio:' }
+      { id: 'q1', type: 'text', text: 'What is the difference between raster and vector images?' },
+      { id: 'q2', type: 'text', text: 'Name some tools you know in Photoshop.' },
+      { id: 'q3', type: 'textarea', text: 'What are layers? Why are they important?' },
+      { id: 'q4', type: 'textarea', text: 'What are smart objects and how are they useful?' },
+      { id: 'q5', type: 'textarea', text: 'Explain the function of any three tools you know in Photoshop.' },
+      { id: 'q6', type: 'textarea', text: 'How would you remove the background of an image in Photoshop?' },
+      { id: 'q7', type: 'text', text: 'What are anchor points and paths?' },
+      { id: 'q8', type: 'textarea', text: 'When would you use Photoshop instead of Illustrator?' },
+      { id: 'q9', type: 'textarea', text: 'What is masking? Difference between layer mask and clipping mask?' },
+      { id: 'q10', type: 'textarea', text: 'What is the difference between brightness/contrast and levels/curves?' }
     ]
   },
 
@@ -69,7 +76,7 @@ export const DOMAIN_QUESTIONS = {
     ]
   },
 
-  management: {
+  event_management: {
     title: 'Management',
     questions: [
       { id: 'q1', type: 'textarea', text: 'Tell us about yourself.' },
