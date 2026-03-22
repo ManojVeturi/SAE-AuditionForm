@@ -15,7 +15,7 @@ export default function Questions() {
   const [error,       setError]       = useState('');
   const [showWarning, setShowWarning] = useState(false);
   const [warnCount,   setWarnCount]   = useState(0);
-  const [guardActive, setGuardActive] = useState(false);
+  const [guardActive, setGuardActive] = useState(false); // becomes true after 3s delay
 
   const answersRef   = useRef({});
   const hasSubmitted = useRef(false);
@@ -88,15 +88,9 @@ export default function Questions() {
         }, { merge: true })
       ]);
 
-      // ✅ Mirror to Google Sheets — each q1, q2, q3... as its own column
+      // Mirror to Google Sheets
       for (const domainId of selectedDomains) {
         const flat = buildFlatAnswers(domainId);
-
-        // Build { q1: "answer or NULL", q2: "answer or NULL", ... }
-        const questionColumns = Object.fromEntries(
-          Object.entries(flat).map(([key, val]) => [key, val ?? 'NULL'])
-        );
-
         await sendToSheets({
           domain:        domainId,
           name:          userDetails.name     || '',
@@ -107,8 +101,8 @@ export default function Questions() {
           gender:        userDetails.gender   || '',
           branch:        userDetails.branch   || '',
           allDomains:    selectedDomains.join(' | '),
-          autoSubmitted: isAutoSubmit ? 'YES' : 'NO',
-          ...questionColumns   // spreads q1, q2, q3 ... as individual keys
+          answers:       Object.values(flat).map((v) => (v ?? 'NULL')).join(' | '),
+          autoSubmitted: isAutoSubmit ? 'YES' : 'NO'
         });
       }
 
