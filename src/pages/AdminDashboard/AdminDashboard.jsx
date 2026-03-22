@@ -51,7 +51,9 @@ export default function AdminDashboard() {
         const q = query(collection(db, domain), where('email', '==', user.email));
         const domainSnap = await getDocs(q);
         if (!domainSnap.empty) {
-          answersMap[domain] = domainSnap.docs[0].data().responses;
+          const docData = domainSnap.docs[0].data();
+          const { userId, email, autoSubmitted, submittedAt, ...flatAnswers } = docData;
+          answersMap[domain] = flatAnswers;
         }
       }
       setUserAnswers(answersMap);
