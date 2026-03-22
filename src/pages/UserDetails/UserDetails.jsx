@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../firebase';
+import { auth, db } from '../../firebase';
 import { User, AlertCircle, ArrowRight } from 'lucide-react';
 
 import './UserDetails.css';

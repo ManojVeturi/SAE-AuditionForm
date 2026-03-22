@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
-import Login from './pages/Login';
-import UserDetails from './pages/UserDetails';
-import DomainSelection from './pages/DomainSelection';
-import Questions from './pages/Questions';
-import Success from './pages/Success';
-import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
+import Login from './pages/Login/Login';
+import UserDetails from './pages/UserDetails/UserDetails';
+import DomainSelection from './pages/DomainSelection/DomainSelection';
+import Questions from './pages/Questions/Questions';
+import Success from './pages/Success/Success';
+import AdminLogin from './pages/AdminLogin/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard/AdminDashboard';
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);

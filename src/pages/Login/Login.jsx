@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { signInWithPopup } from 'firebase/auth';
-import { auth, provider, db } from '../firebase';
+import { auth, provider, db } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { LogIn, AlertCircle } from 'lucide-react';

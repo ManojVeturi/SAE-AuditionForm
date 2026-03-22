@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { db, auth } from '../../firebase';
 import { Monitor, PenTool, Calendar, Settings, Link, ArrowRight, AlertCircle } from 'lucide-react';
 
 import './DomainSelection.css';

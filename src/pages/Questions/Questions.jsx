@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { collection, addDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { db, auth } from '../../firebase';
 import { Send, AlertCircle, ChevronLeft } from 'lucide-react';
-import { DOMAIN_QUESTIONS } from '../data/questions';
+import { DOMAIN_QUESTIONS } from '../../data/questions';
 
 import './Questions.css';
 

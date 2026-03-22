@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase';
-import { DOMAIN_QUESTIONS } from '../data/questions';
+import { db } from '../../firebase';
+import { DOMAIN_QUESTIONS } from '../../data/questions';
 import { Users, LogOut, ChevronRight, User as UserIcon, Search, Trash2, Download } from 'lucide-react';
 
 export default function AdminDashboard() {
