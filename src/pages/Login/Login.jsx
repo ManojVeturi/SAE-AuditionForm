@@ -42,14 +42,6 @@ export default function Login() {
         return;
       }
 
-      // 🔥 OPTIONAL: Restrict to institute email
-      if (!user.email.endsWith("@nitdgp.ac.in")) {
-        alert("❌ Use your institute email only");
-        await signOut(auth);
-        setLoading(false);
-        return;
-      }
-
       // 🔥 STEP 2: CHECK IF ALREADY SUBMITTED
       if (db) {
         const userRef = doc(db, 'users', user.uid);
