@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithPopup, signOut } from 'firebase/auth';
 import { auth, provider, db } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -12,10 +12,16 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // 🔥 CHECK IF USER IS ALLOWED
+  const checkUserAllowed = async (email) => {
+    const userRef = doc(db, "allowed_users", email); // document ID = email
+    const snap = await getDoc(userRef);
+    return snap.exists();
+  };
+
   const handleGoogleLogin = async () => {
     if (!auth || !provider) {
-      setError("Firebase requires configuration. For demo purposes, we will bypass login to details.");
-      setTimeout(() => navigate('/details'), 1500);
+      setError("Firebase requires configuration.");
       return;
     }
     
@@ -25,7 +31,26 @@ export default function Login() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      
+
+      // 🔥 STEP 1: CHECK IF REGISTERED
+      const allowed = await checkUserAllowed(user.email);
+
+      if (!allowed) {
+        alert("❌ You are not registered for SAE auditions");
+        await signOut(auth);
+        setLoading(false);
+        return;
+      }
+
+      // 🔥 OPTIONAL: Restrict to institute email
+      if (!user.email.endsWith("@nitdgp.ac.in")) {
+        alert("❌ Use your institute email only");
+        await signOut(auth);
+        setLoading(false);
+        return;
+      }
+
+      // 🔥 STEP 2: CHECK IF ALREADY SUBMITTED
       if (db) {
         const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
@@ -35,7 +60,10 @@ export default function Login() {
           return;
         }
       }
+
+      // 🔥 STEP 3: ALLOW ACCESS
       navigate('/details');
+
     } catch (err) {
       console.error(err);
       setError(err.message || 'Failed to sign in. Please try again.');
@@ -47,12 +75,18 @@ export default function Login() {
   return (
     <div className="container animate-fade-in login-page">
       <div className="glass-panel login-panel">
-        <h2 className="login-title font-display font-extrabold">Join <span className="text-primary">SAE</span></h2>
-        <p className="text-text-secondary login-subtitle">Society of Automotive Engineers</p>
+        <h2 className="login-title font-display font-extrabold">
+          Join <span className="text-primary">SAE</span>
+        </h2>
+        <p className="text-text-secondary login-subtitle">
+          Society of Automotive Engineers
+        </p>
         
         <p className="login-desc">
           Please sign in with your Google account to start your audition. <br/>
-          <strong className="text-primary font-bold">One submission allowed per email.</strong>
+          <strong className="text-primary font-bold">
+            One submission allowed per email.
+          </strong>
         </p>
 
         {error && (

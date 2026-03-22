@@ -30,8 +30,8 @@ class GlobalError extends Component {
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <GlobalError>   {/* 👈 OUTSIDE */}
-      <BrowserRouter>   {/* 👈 INSIDE */}
+    <GlobalError>
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </GlobalError>
