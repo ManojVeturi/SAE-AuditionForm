@@ -121,9 +121,6 @@ export default function AdminDashboard() {
             allDomains: (u.domains || []).join(" | "),
             answers: answersStr
           }),
-          headers: {
-            "Content-Type": "application/json"
-          }
         });
       }
     }
