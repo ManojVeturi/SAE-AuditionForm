@@ -388,9 +388,9 @@ export default function AdminDashboard() {
                     <p className="adm-detail-email">{selectedUser.email}</p>
                   </div>
                 </div>
-                {/* <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
+                <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
                   <Trash2 size={14} /><span className="adm-hide-xs"> Delete</span>
-                </button> */}
+                </button>
               </div>
 
               {/* Bio Grid */}
