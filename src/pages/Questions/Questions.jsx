@@ -88,6 +88,24 @@ export default function Questions() {
         }, { merge: true })
       ]);
 
+      // 🔥 SEND TO GOOGLE SHEETS
+      for (const domainId of selectedDomains) {
+        const flat = buildFlatAnswers(domainId);
+
+        await sendToSheets({
+          domain: domainId,
+          name: userDetails.name,
+          email: userEmail,
+          rollNo: userDetails.rollNo,
+          whatsapp: userDetails.whatsapp,
+          year: userDetails.year,
+          gender: userDetails.gender,
+          branch: userDetails.branch,
+          allDomains: selectedDomains.join(' | '),
+          answers: Object.values(flat).map(v => v ?? 'NULL').join(' | ')
+        });
+      }
+
       // 🔥 EMAIL SEND
       try {
         await emailjs.send(
