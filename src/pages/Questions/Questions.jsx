@@ -4,6 +4,7 @@ import { collection, addDoc, doc, setDoc, serverTimestamp } from 'firebase/fires
 import { db, auth } from '../../firebase';
 import { Send, AlertCircle, ChevronLeft, ShieldAlert } from 'lucide-react';
 import { DOMAIN_QUESTIONS } from '../../data/questions';
+import emailjs from '@emailjs/browser';
 import './Questions.css';
 
 export default function Questions() {
@@ -65,7 +66,6 @@ export default function Questions() {
 
       const userRef = doc(db, 'users', userId);
 
-      // Each domain → its own Firestore document with flat columns (q1, q2 … or null)
       const domainPromises = selectedDomains.map((domainId) => {
         const flat = buildFlatAnswers(domainId);
         return addDoc(collection(db, domainId), {
@@ -88,25 +88,23 @@ export default function Questions() {
         }, { merge: true })
       ]);
 
-      // Mirror to Google Sheets
-      for (const domainId of selectedDomains) {
-        const flat = buildFlatAnswers(domainId);
-        await sendToSheets({
-          domain:        domainId,
-          name:          userDetails.name     || '',
-          email:         userEmail,
-          rollNo:        userDetails.rollNo   || '',
-          whatsapp:      userDetails.whatsapp || '',
-          year:          userDetails.year     || '',
-          gender:        userDetails.gender   || '',
-          branch:        userDetails.branch   || '',
-          allDomains:    selectedDomains.join(' | '),
-          answers:       Object.values(flat).map((v) => (v ?? 'NULL')).join(' | '),
-          autoSubmitted: isAutoSubmit ? 'YES' : 'NO'
-        });
+      // 🔥 EMAIL SEND
+      try {
+        await emailjs.send(
+          "SAE_ROUND_1",
+          "template_ebphfzl",
+          {
+            name: userDetails.name || "Candidate",
+            email: userEmail
+          },
+          "9UdKdWJonqj2mXI8W"
+        );
+      } catch (err) {
+        console.error("Email failed:", err);
       }
 
       navigate('/success');
+
     } catch (err) {
       console.error(err);
       isSubmitting.current = false;
