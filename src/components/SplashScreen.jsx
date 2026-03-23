@@ -6,7 +6,7 @@ export default function SplashScreen({ finishLoading }) {
     <div className={`splash-screen ${finishLoading ? 'fade-out' : ''}`}>
       <div className="splash-content">
         <h1 className="splash-title font-display">
-          <span className="text-white">SAE</span> <span className="text-primary">AUDITION</span> <span className="text-white">2026</span> 
+          <span className="text-white">SAE</span> <span className="text-primary">AUDITIONS</span> <span className="text-white">2026</span> 
         </h1>
       </div>
       
