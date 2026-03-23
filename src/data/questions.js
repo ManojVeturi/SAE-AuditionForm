@@ -17,7 +17,7 @@ export const DOMAIN_QUESTIONS = {
   },
 
   graphic_designing: {
-    title: 'Graphic Design & Video Editing',
+    title: 'Graphic Designing',
     questions: [
       { id: 'q1', type: 'text', text: 'What is the difference between raster and vector images?' },
       { id: 'q2', type: 'text', text: 'Name some tools you know in Photoshop.' },
