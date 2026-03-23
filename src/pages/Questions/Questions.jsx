@@ -42,7 +42,7 @@ export default function Questions() {
   const sendToSheets = async (data) => {
     try {
       await fetch(
-        'https://script.google.com/macros/s/AKfycbww6Ku32V2SAQwH3KhFLYqi3DxQLPGuXJDDSm0XfHi-Qh7vSzBVetDQnLp2LCwmmxV5fw/exec',
+        'https://script.google.com/macros/s/AKfycbyozX6jtc4zOk6Tsl6_BcvssJSF7-8kjm2SlkdSl6J1IiOeZqCV1ipTWrt9bNZ8EMFO8A/exec',
         { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) }
       );
     } catch (err) {
