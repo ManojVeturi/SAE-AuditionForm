@@ -143,7 +143,7 @@ export default function AdminDashboard() {
           answersStr = Object.values(flat).map(v => v ?? 'NULL').join(' | ');
         }
         await fetch(
-          'https://script.google.com/macros/s/AKfycbww6Ku32V2SAQwH3KhFLYqi3DxQLPGuXJDDSm0XfHi-Qh7vSzBVetDQnLp2LCwmmxV5fw/exec',
+          'https://script.google.com/a/macros/nitdgp.ac.in/s/AKfycbyozX6jtc4zOk6Tsl6_BcvssJSF7-8kjm2SlkdSl6J1IiOeZqCV1ipTWrt9bNZ8EMFO8A/exec',
           {
             method: 'POST', mode: 'no-cors',
             body: JSON.stringify({
