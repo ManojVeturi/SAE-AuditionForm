@@ -3,7 +3,7 @@
 }
 
 .domain-content {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
@@ -34,36 +34,88 @@
   font-size: 1.05rem;
 }
 
-.domain-grid-main {
+/* ── Unified 3-column grid ── */
+.domain-grid {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+  /* Center any orphaned last item */
+  justify-items: stretch;
 }
 
-.domain-grid-top {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+/*
+  7 items → row 3 has 1 card (index 7 = 3n+1).
+  Push it to column 2 so it sits in the middle.
+*/
+.domain-card:last-child:nth-child(3n + 1) {
+  grid-column: 2;
 }
 
-@media (min-width: 768px) {
-  .domain-grid-top {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+/* ── Domain Card ── */
+.domain-card {
+  cursor: pointer;
+  display: block;
 }
 
-.domain-grid-bottom {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+.domain-card input[type='checkbox'] {
+  display: none;
 }
 
-@media (min-width: 768px) {
-  .domain-grid-bottom {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.card-content {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.25s, background 0.25s, transform 0.2s;
+  height: 100%;
+  box-sizing: border-box;
 }
 
+.domain-card input:checked + .card-content {
+  border-color: var(--color-primary);
+  background: rgba(229, 9, 20, 0.07);
+}
+
+.domain-card:hover .card-content {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.055);
+  transform: translateY(-2px);
+}
+
+.domain-card input:checked + .card-content:hover {
+  border-color: var(--color-primary);
+  background: rgba(229, 9, 20, 0.1);
+}
+
+/* ── Card internals ── */
+.domain-card-icon-box {
+  padding: 0.875rem;
+  display: inline-flex;
+  border-radius: 0.75rem;
+  margin-bottom: 1.25rem;
+  transition: background 0.3s;
+}
+
+.domain-card-icon-box.selected {
+  background-color: var(--color-primary);
+}
+
+.domain-card-icon-box.unselected {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.domain-card-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.45rem;
+}
+
+.domain-card-desc {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+/* ── CTA ── */
 .domain-next-container {
   display: flex;
   justify-content: center;
@@ -72,33 +124,61 @@
 
 .domain-next-btn {
   padding: 1rem 2.5rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   border-radius: 9999px;
-}
-
-/* Domain Card Inner Classes */
-.domain-card-icon-box {
-  padding: 0.875rem;
   display: inline-flex;
-  border-radius: 0.75rem;
-  margin-bottom: 1.25rem;
-  transition: all 0.3s;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.domain-card-icon-box.selected {
-  background-color: var(--color-primary);
+/* ── Tablet: 2 columns ── */
+@media (max-width: 768px) {
+  .domain-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 7 items in 2-col → last item is alone at position 7 = 2n+1 */
+  .domain-card:last-child:nth-child(3n + 1) {
+    grid-column: auto; /* reset desktop rule */
+  }
+
+  .domain-card:last-child:nth-child(2n + 1) {
+    grid-column: 1 / -1;        /* full width */
+    max-width: calc(50% - 0.75rem); /* same width as peers */
+    justify-self: center;
+  }
+
+  .domain-card-title { font-size: 1.1rem; }
 }
 
-.domain-card-icon-box.unselected {
-  background-color: rgba(255, 255, 255, 0.05);
-}
+/* ── Mobile: 1 column ── */
+@media (max-width: 480px) {
+  .domain-page { padding: 2.5rem 1rem; }
 
-.domain-card-title {
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
-}
+  .domain-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 
-.domain-card-desc {
-  font-size: 1rem;
-  color: var(--color-text-secondary);
+  /* Reset all centering tricks — single col, everything full width */
+  .domain-card:last-child:nth-child(3n + 1),
+  .domain-card:last-child:nth-child(2n + 1) {
+    grid-column: auto;
+    max-width: none;
+    justify-self: stretch;
+  }
+
+  .domain-title    { font-size: 1.5rem; }
+  .domain-subtitle { font-size: 1rem; margin-bottom: 2rem; }
+
+  .card-content { padding: 1.25rem; }
+  .domain-card-icon-box { margin-bottom: 0.9rem; }
+  .domain-card-title { font-size: 1.05rem; }
+  .domain-card-desc  { font-size: 0.88rem; }
+
+  .domain-next-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 1rem;
+  }
 }

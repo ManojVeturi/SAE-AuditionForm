@@ -87,7 +87,6 @@ export default function DomainSelection() {
       setError('Please select at least one domain to continue.');
       return;
     }
-
     navigate('/questions', {
       state: {
         selectedDomains,
@@ -111,13 +110,15 @@ export default function DomainSelection() {
           </div>
         )}
 
-        <div className="domain-grid-main">
-          <div className="domain-grid-top">
-            {availableDomains.slice(0, 2).map(domain => <DomainCard key={domain.id} domain={domain} isSelected={selectedDomains.includes(domain.id)} onToggle={handleToggle} />)}
-          </div>
-          <div className="domain-grid-bottom">
-            {availableDomains.slice(2).map(domain => <DomainCard key={domain.id} domain={domain} isSelected={selectedDomains.includes(domain.id)} onToggle={handleToggle} />)}
-          </div>
+        <div className="domain-grid">
+          {availableDomains.map(domain => (
+            <DomainCard
+              key={domain.id}
+              domain={domain}
+              isSelected={selectedDomains.includes(domain.id)}
+              onToggle={handleToggle}
+            />
+          ))}
         </div>
 
         <div className="domain-next-container">

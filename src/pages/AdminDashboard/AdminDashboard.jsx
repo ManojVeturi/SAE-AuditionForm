@@ -5,7 +5,7 @@ import { db } from '../../firebase';
 import { DOMAIN_QUESTIONS } from '../../data/questions';
 import {
   Users, LogOut, ChevronRight, User as UserIcon,
-  Search, Trash2, Download, X, LayoutGrid, ArrowLeft
+  Search, Trash2, Download, X, LayoutGrid, ArrowLeft, Menu
 } from 'lucide-react';
 import './AdminDashboard.css';
 
@@ -19,7 +19,9 @@ export default function AdminDashboard() {
   const [selectedUser,   setSelectedUser]   = useState(null);
   const [userAnswers,    setUserAnswers]     = useState(null);
   const [loadingAnswers, setLoadingAnswers]  = useState(false);
+  // view: 'domains' | 'users' | 'detail'
   const [view,           setView]           = useState('domains');
+  const [sidebarOpen,    setSidebarOpen]    = useState(false);
 
   /* ── auth guard ─────────────────────────────── */
   useEffect(() => {
@@ -70,6 +72,7 @@ export default function AdminDashboard() {
     setUserAnswers(null);
     setSearchTerm('');
     setView('users');
+    setSidebarOpen(false);
   };
 
   /* ── select user → fetch answers for that domain */
@@ -87,7 +90,6 @@ export default function AdminDashboard() {
         const q    = query(collection(db, domainId), where('email', '==', user.email));
         const snap = await getDocs(q);
         if (!snap.empty) {
-          // strip metadata, keep only flat answer fields (q1, q2 …)
           const { userId, email, autoSubmitted, submittedAt, ...flat } = snap.docs[0].data();
           answersMap[domainId] = flat;
         }
@@ -164,7 +166,7 @@ export default function AdminDashboard() {
   };
 
   /* ── stats ───────────────────────────────────── */
-  const totalSubmissions  = users.length;
+  const totalSubmissions   = users.length;
   const autoSubmittedCount = users.filter(u => u.autoSubmitted).length;
   const multiDomainCount   = users.filter(u => (u.domains?.length || 0) > 1).length;
 
@@ -177,17 +179,23 @@ export default function AdminDashboard() {
       {/* ── Top Bar ── */}
       <header className="adm-topbar">
         <div className="adm-topbar-left">
+          {/* Hamburger — mobile only, shown on users/detail views */}
+          {view !== 'domains' && (
+            <button className="adm-hamburger" onClick={() => setSidebarOpen(true)} aria-label="Open domains">
+              <Menu size={20} />
+            </button>
+          )}
           <div className="adm-logo-box">
-            <LayoutGrid size={20} />
+            <LayoutGrid size={18} />
           </div>
           <span className="adm-topbar-title">Admin Dashboard</span>
         </div>
         <div className="adm-topbar-right">
-          <button onClick={handleExport} className="adm-btn adm-btn-ghost">
-            <Download size={15} /> Export Sheets
+          <button onClick={handleExport} className="adm-btn adm-btn-ghost adm-hide-xs">
+            <Download size={15} /> Export
           </button>
           <button onClick={handleLogout} className="adm-btn adm-btn-ghost">
-            <LogOut size={15} /> Logout
+            <LogOut size={15} /><span className="adm-hide-xs"> Logout</span>
           </button>
         </div>
       </header>
@@ -196,7 +204,7 @@ export default function AdminDashboard() {
       <div className="adm-stats-bar">
         <div className="adm-stat">
           <span className="adm-stat-value">{totalSubmissions}</span>
-          <span className="adm-stat-label">Total Submissions</span>
+          <span className="adm-stat-label">Submissions</span>
         </div>
         <div className="adm-stat-divider" />
         <div className="adm-stat">
@@ -215,11 +223,37 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {/* ── Mobile sidebar overlay ── */}
+      {sidebarOpen && (
+        <div className="adm-overlay" onClick={() => setSidebarOpen(false)}>
+          <aside className="adm-sidebar adm-sidebar-overlay" onClick={e => e.stopPropagation()}>
+            <div className="adm-sidebar-overlay-header">
+              <p className="adm-sidebar-heading">Domains</p>
+              <button className="adm-icon-btn" onClick={() => setSidebarOpen(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <nav className="adm-domain-nav">
+              {domains.map(d => (
+                <button
+                  key={d.id}
+                  onClick={() => handleSelectDomain(d.id)}
+                  className={`adm-domain-btn ${selectedDomain === d.id ? 'active' : ''}`}
+                >
+                  <span className="adm-domain-btn-title">{d.title}</span>
+                  <span className="adm-domain-count">{d.count}</span>
+                </button>
+              ))}
+            </nav>
+          </aside>
+        </div>
+      )}
+
       {/* ── Main Layout ── */}
       <div className="adm-body">
 
-        {/* ════ SIDEBAR — always visible ════ */}
-        <aside className="adm-sidebar">
+        {/* ════ SIDEBAR — desktop always visible ════ */}
+        <aside className="adm-sidebar adm-sidebar-desktop">
           <p className="adm-sidebar-heading">Domains</p>
           {loading ? (
             <p className="adm-loading-text">Loading…</p>
@@ -239,8 +273,34 @@ export default function AdminDashboard() {
           )}
         </aside>
 
+        {/* ════ MOBILE: Domains screen ════ */}
+        <section className={`adm-mobile-domains ${view === 'domains' ? 'adm-mobile-screen-active' : ''}`}>
+          <div className="adm-mobile-screen-inner">
+            <p className="adm-sidebar-heading" style={{ padding: '1rem 1rem 0.5rem' }}>Select a Domain</p>
+            {loading ? (
+              <p className="adm-loading-text" style={{ padding: '1rem' }}>Loading…</p>
+            ) : (
+              <nav className="adm-domain-nav adm-domain-nav-mobile">
+                {domains.map(d => (
+                  <button
+                    key={d.id}
+                    onClick={() => handleSelectDomain(d.id)}
+                    className="adm-domain-btn adm-domain-btn-mobile"
+                  >
+                    <span className="adm-domain-btn-title">{d.title}</span>
+                    <div className="adm-domain-btn-right">
+                      <span className="adm-domain-count">{d.count}</span>
+                      <ChevronRight size={16} />
+                    </div>
+                  </button>
+                ))}
+              </nav>
+            )}
+          </div>
+        </section>
+
         {/* ════ CENTER — user list ════ */}
-        <section className={`adm-panel adm-users-panel ${view === 'domains' ? 'adm-panel-empty' : ''}`}>
+        <section className={`adm-panel adm-users-panel ${view === 'users' ? 'adm-mobile-screen-active' : ''} ${view === 'domains' ? 'adm-panel-empty' : ''}`}>
           {!selectedDomain ? (
             <div className="adm-placeholder">
               <LayoutGrid size={48} className="adm-placeholder-icon" />
@@ -249,7 +309,11 @@ export default function AdminDashboard() {
           ) : (
             <>
               <div className="adm-panel-header">
-                <div>
+                {/* Mobile back to domains */}
+                <button className="adm-back-btn adm-mobile-only" onClick={() => setView('domains')}>
+                  <ArrowLeft size={15} /> Domains
+                </button>
+                <div className="adm-panel-header-meta">
                   <h3 className="adm-panel-title">{currentDomainMeta?.title}</h3>
                   <p className="adm-panel-sub">{filteredDomainUsers.length} applicant{filteredDomainUsers.length !== 1 ? 's' : ''}</p>
                 </div>
@@ -289,7 +353,7 @@ export default function AdminDashboard() {
                       <div className="adm-user-row-right">
                         {u.autoSubmitted && <span className="adm-tag adm-tag-warn">Auto</span>}
                         {(u.domains?.length || 0) > 1 && (
-                          <span className="adm-tag adm-tag-info">{u.domains.length} domains</span>
+                          <span className="adm-tag adm-tag-info">{u.domains.length}d</span>
                         )}
                         <ChevronRight size={16} className="adm-chevron" />
                       </div>
@@ -302,7 +366,7 @@ export default function AdminDashboard() {
         </section>
 
         {/* ════ RIGHT — detail panel ════ */}
-        <section className={`adm-panel adm-detail-panel ${view === 'detail' ? 'adm-detail-open' : ''}`}>
+        <section className={`adm-panel adm-detail-panel ${view === 'detail' ? 'adm-mobile-screen-active adm-detail-open' : ''}`}>
           {!selectedUser ? (
             <div className="adm-placeholder">
               <UserIcon size={48} className="adm-placeholder-icon" />
@@ -312,21 +376,20 @@ export default function AdminDashboard() {
             <>
               {/* Detail Header */}
               <div className="adm-detail-header">
-                <button className="adm-back-btn adm-mobile-only" onClick={() => setView('users')}>
-                  <ArrowLeft size={16} /> Back
+                <button className="adm-back-btn" onClick={() => setView('users')}>
+                  <ArrowLeft size={15} /> Back
                 </button>
                 <div className="adm-detail-identity">
                   <div className="adm-detail-avatar">
                     {(selectedUser.name || selectedUser.email || '?')[0].toUpperCase()}
                   </div>
-                  <div>
+                  <div className="adm-detail-identity-text">
                     <h2 className="adm-detail-name">{selectedUser.name || 'Applicant'}</h2>
                     <p className="adm-detail-email">{selectedUser.email}</p>
                   </div>
                 </div>
-
                 <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
-                  <Trash2 size={15} /> Delete
+                  <Trash2 size={14} /><span className="adm-hide-xs"> Delete</span>
                 </button>
               </div>
 
@@ -369,7 +432,6 @@ export default function AdminDashboard() {
                   <p className="adm-loading-text">Could not load answers.</p>
                 ) : (
                   (() => {
-                    // Show answers only for the selected domain
                     const domainMeta      = DOMAIN_QUESTIONS[selectedDomain];
                     const domainResponses = userAnswers[selectedDomain];
 
@@ -405,10 +467,9 @@ export default function AdminDashboard() {
                           </p>
                         )}
 
-                        {/* If user applied to other domains too, show a note */}
                         {selectedUser.domains?.filter(d => d !== selectedDomain).length > 0 && (
                           <p className="adm-other-domains-note">
-                            This applicant also applied for:{' '}
+                            Also applied for:{' '}
                             {selectedUser.domains
                               .filter(d => d !== selectedDomain)
                               .map(d => DOMAIN_QUESTIONS[d]?.title || d)
