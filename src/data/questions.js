@@ -32,6 +32,22 @@ export const DOMAIN_QUESTIONS = {
     ]
   },
 
+  video_editing: {
+    title: 'Video Editing',
+    questions: [
+      { id: 'q1', type: 'text', text: 'What is frame rate (FPS), what is the standard frame rate, and when should you use high vs low FPS?' },
+      { id: 'q2', type: 'text', text: '“What is a timeline, and how do you apply effects and delete unwanted parts of clips?”' },
+      { id: 'q3', type: 'textarea', text: 'What is the difference between Adobe After Effects and Adobe Premiere Pro?' },
+      { id: 'q4', type: 'textarea', text: 'What are keyframes? How do they create animation in Adobe After Effects?' },
+      { id: 'q5', type: 'textarea', text: 'Difference between Gaussian blur and normal blur.' },
+      { id: 'q6', type: 'textarea', text: 'What is masking in VFX? How do you track a mask to a moving object?' },
+      { id: 'q7', type: 'text', text: 'What is color grading and how is it different from color correction?' },
+      { id: 'q8', type: 'textarea', text: 'Name 3 tools you use most while editing and explain why.' },
+      { id: 'q9', type: 'textarea', text: 'What is an audio transition? How do you smoothly connect two different audio clips?' },
+      { id: 'q10', type: 'textarea', text: '“Is symmetry important in making a video look neat? If so why?”' }
+    ]
+  },
+
   robotics: {
     title: 'Robotics',
     questions: [

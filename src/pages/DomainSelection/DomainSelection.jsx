@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase';
-import { Monitor, PenTool, Calendar, Settings, Cpu, Brain, ArrowRight, AlertCircle } from 'lucide-react';
+import { Monitor, PenTool, Video, Calendar, Settings, Cpu, Brain, ArrowRight, AlertCircle } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 
 import './DomainSelection.css';
@@ -16,9 +16,15 @@ const availableDomains = [
   },
   {
     id: 'graphic_designing',
-    title: 'Graphic Design & Video Editing',
+    title: 'Graphic Design',
     desc: 'Bring ideas to life with visual storytelling.',
     icon: PenTool
+  },
+  {
+    id: 'video_editing',
+    title: 'Video Editing',
+    desc: 'Create and edit engaging visual content and stories.',
+    icon: Video
   },
   {
     id: 'event_management',
