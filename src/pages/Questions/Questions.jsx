@@ -92,7 +92,7 @@ export default function Questions() {
       try {
         await emailjs.send(
           "SAE_ROUND_1",
-          "template_ebphfzl",
+          "template_yxwe6s4",
           {
             name: userDetails.name || "Candidate",
             email: userEmail
