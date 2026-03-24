@@ -74,11 +74,9 @@ export default function Login() {
   return (
     <div className="container animate-fade-in login-page">
       <div className="glass-panel login-panel">
-        <h2 className="login-title font-display font-extrabold">
-          Join <span className="text-primary">SAE</span>
-        </h2>
-        <p className="text-text-secondary login-subtitle">
-          Society of Automotive Engineers
+
+        <p className="login-welcome">
+          Welcome to <span className="highlight-sae">SAE</span> Auditions – Round 1
         </p>
         
         <p className="login-desc">

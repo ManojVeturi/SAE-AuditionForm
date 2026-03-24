@@ -54,3 +54,15 @@
   padding: 0.875rem;
   font-size: 1.125rem;
 }
+
+.login-welcome {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.highlight-sae {
+  color: var(--color-primary);
+  font-weight: 700;
+}

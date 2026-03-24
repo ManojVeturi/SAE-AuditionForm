@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import Login from './pages/Login/Login';
@@ -19,6 +19,7 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Splash minimum time
   useEffect(() => {
@@ -83,14 +84,16 @@ function App() {
         )}
 
         {/* ADMIN BUTTON */}
-        <div>
-          <button
-            onClick={() => navigate("/admin")}
-            className="btn-secondary flex items-center gap-2 px-4 py-2.5"
-          >
-            Admin Login
-          </button>
-        </div>
+        {!location.pathname.startsWith("/admin") && (
+          <div>
+            <button
+              onClick={() => navigate("/admin")}
+              className="btn-secondary flex items-center gap-2 px-4 py-2.5"
+            >
+              Admin Login
+            </button>
+          </div>
+        )}
       </header>
 
       {/* ROUTES */}
