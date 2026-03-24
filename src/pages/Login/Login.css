@@ -66,3 +66,12 @@
   color: var(--color-primary);
   font-weight: 700;
 }
+
+.login-note {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #b0b0b0;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+}

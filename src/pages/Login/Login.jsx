@@ -86,6 +86,10 @@ export default function Login() {
           </strong>
         </p>
 
+        <p className="login-note">
+            For the best experience, please use a laptop or desktop while registering.
+        </p>
+
         {error && (
           <div className="login-error">
             <AlertCircle size={18} className="text-primary login-error-icon" />
