@@ -36,7 +36,14 @@ export default function Login() {
       const allowed = await checkUserAllowed(user.email);
 
       if (!allowed) {
-        alert("❌ You are not registered for SAE auditions");
+        const goRegister = window.confirm(
+          "❌ You are not registered for SAE auditions\n\nDo you want to register now?"
+        );
+
+        if (goRegister) {
+          window.location.href = "https://auditions.saenitd.in";
+        }
+
         await signOut(auth);
         setLoading(false);
         return;
