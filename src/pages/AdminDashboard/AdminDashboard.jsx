@@ -210,8 +210,8 @@ export default function AdminDashboard() {
           <span className="adm-topbar-title">Admin Dashboard</span>
         </div>
         <div className="adm-topbar-right">
-          <button onClick={handleExport} className="adm-btn adm-btn-ghost adm-hide-xs">
-            <Download size={15} /> Export
+          <button onClick={handleExport} className="adm-btn adm-btn-ghost">
+            <Download size={15} /><span className="adm-hide-xs"> Export</span>
           </button>
           <button onClick={handleLogout} className="adm-btn adm-btn-ghost">
             <LogOut size={15} /><span className="adm-hide-xs"> Logout</span>
@@ -409,10 +409,10 @@ export default function AdminDashboard() {
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }} data-html2canvas-ignore="true">
                   <button onClick={handleExportPDF} className="adm-btn adm-btn-primary" style={{ background: 'var(--color-primary)', color: 'white' }} title="Export as PDF">
-                    <Download size={14} /><span className="adm-hide-xs"> Export PDF</span>
+                    <Download size={14} /><span> Export PDF</span>
                   </button>
                   <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
-                    <Trash2 size={14} /><span className="adm-hide-xs"> Delete</span>
+                    <Trash2 size={14} /><span> Delete</span>
                   </button>
                 </div>
               </div>
