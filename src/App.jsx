@@ -5,6 +5,7 @@ import { auth } from './firebase';
 import Login from './pages/Login/Login';
 import UserDetails from './pages/UserDetails/UserDetails';
 import DomainSelection from './pages/DomainSelection/DomainSelection';
+import Instructions from './pages/Instructions/Instructions';
 import Questions from './pages/Questions/Questions';
 import Success from './pages/Success/Success';
 import AdminLogin from './pages/AdminLogin/AdminLogin';
@@ -101,6 +102,7 @@ function App() {
         <Routes>
           <Route path="/" element={!user ? <Login /> : <Navigate to="/details" />} />
           <Route path="/details" element={user ? <UserDetails /> : <Navigate to="/" />} />
+          <Route path="/instructions" element={user ? <Instructions /> : <Navigate to="/" />} />
           <Route path="/domains" element={user ? <DomainSelection /> : <Navigate to="/" />} />
           <Route path="/questions" element={user ? <Questions /> : <Navigate to="/" />} />
           <Route path="/success" element={user ? <Success /> : <Navigate to="/" />} />

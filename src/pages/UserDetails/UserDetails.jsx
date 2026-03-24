@@ -63,7 +63,7 @@ export default function UserDetails() {
       } else {
         console.warn("No DB config, bypassing db save...");
       }
-      navigate('/domains', {
+      navigate('/instructions', {
         state: { userDetails: formData }
       });
     } catch (err) {

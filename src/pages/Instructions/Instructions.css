@@ -1,0 +1,136 @@
+.instructions-page {
+  padding-top: 6rem;
+  padding-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+}
+
+.instructions-content {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.instructions-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.instructions-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #fff 0%, #a0a0a0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.instructions-subtitle {
+  font-size: 1.1rem;
+}
+
+.instructions-panel {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.instructions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.instructions-list li {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--text-primary, #ffffff);
+}
+
+.instruction-number {
+  color: var(--primary-color, #ff4c4c);
+  font-weight: bold;
+  font-size: 1.2rem;
+  min-width: 1.5rem;
+}
+
+.instructions-agreement {
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: var(--primary-color, #ff4c4c);
+}
+
+.checkbox-text {
+  font-size: 1.1rem;
+  color: var(--text-secondary, #a0a0a0);
+  transition: color 0.3s;
+}
+
+.checkbox-label:hover .checkbox-text {
+  color: var(--text-primary, #ffffff);
+}
+
+.instructions-submit-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.instructions-next-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.instructions-next-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.instructions-next-btn.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .instructions-title {
+    font-size: 2rem;
+  }
+  
+  .instructions-panel {
+    padding: 1.5rem;
+  }
+}
