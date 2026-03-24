@@ -23,7 +23,7 @@ export const DOMAIN_QUESTIONS = {
       { id: 'q2', type: 'text', text: 'Name some tools you know in Photoshop.' },
       { id: 'q3', type: 'textarea', text: 'What are layers? Why are they important?' },
       { id: 'q4', type: 'textarea', text: 'What are smart objects and how are they useful?' },
-      { id: 'q5', type: 'textarea', text: 'Explain the function of any three tools you know in Photoshop.' },
+      { id: 'q5', type: 'textarea', text: 'Explain function of three tools you know in Photoshop.' },
       { id: 'q6', type: 'textarea', text: 'How would you remove the background of an image in Photoshop?' },
       { id: 'q7', type: 'text', text: 'What are anchor points and paths?' },
       { id: 'q8', type: 'textarea', text: 'When would you use Photoshop instead of Illustrator?' },
@@ -52,43 +52,43 @@ export const DOMAIN_QUESTIONS = {
     title: 'Robotics',
     questions: [
       { id: 'q1', type: 'textarea', text: 'What is a servo motor, and how does it differ from a stepper motor and BO motor?' },
-      { id: 'q2', type: 'textarea', text: 'What are some commonly used sensors in robotics? Provide examples with applications.' },
+      { id: 'q2', type: 'textarea', text: 'What are some commonly used sensors in robotics? Provide examples with their applications.' },
       { id: 'q3', type: 'textarea', text: 'Explain the working principle of an ultrasonic sensor in obstacle detection.' },
-      { id: 'q4', type: 'textarea', text: 'How can a robot recognize and follow a moving object?' },
-      { id: 'q5', type: 'textarea', text: 'A line-following robot deviates from its path. What are possible reasons and fixes?' },
-      { id: 'q6', type: 'textarea', text: 'How would you improve performance of a high-speed line-following robot?' },
-      { id: 'q7', type: 'textarea', text: 'What sensors and algorithms are used in a self-balancing robot?' },
-      { id: 'q8', type: 'textarea', text: 'Will a car moving at 5 m/s stop before hitting obstacle 2m ahead with 0.5s delay? Justify.' },
-      { id: 'q9', type: 'textarea', text: 'What is the role of a motor driver with Arduino? Can it be eliminated?' },
-      { id: 'q10', type: 'textarea', text: 'Calculate coverage width of ultrasonic sensor (30° angle at 50cm). Discuss significance.' }
+      { id: 'q4', type: 'textarea', text: 'Mention one method by which a robot can recognize and follow a moving object.' },
+      { id: 'q5', type: 'textarea', text: 'A line-following robot using IR sensors starts deviating from its path. What could be the possible reasons, and how would you troubleshoot the issue?' },
+      { id: 'q6', type: 'textarea', text: 'If you were to design a high-speed line-following robot, what modifications would you implement to improve performance and stability?' },
+      { id: 'q7', type: 'textarea', text: 'For designing a self-balancing robot, which sensors and control algorithms would you use to minimize error?' },
+      { id: 'q8', type: 'textarea', text: 'A self-driving car detects an obstacle 2 meters ahead using an ultrasonic sensor. The car is moving at 5 m/s, and the braking system has a response delay of 0.5 seconds. Will the car stop before hitting the obstacle? Justify your answer.' },
+      { id: 'q9', type: 'textarea', text: 'An ultrasonic sensor has a detection angle of 30°. If the robot is placed 50 cm away from a wall, calculate the width of the area covered by the sensor at that distance. How does this affect the detection of narrow obstacles? Discuss its significance.' },
+      { id: 'q10', type: 'textarea', text: 'An ultrasonic sensor has a detection angle of 30°. If the robot is placed 50 cm away from a wall, calculate the width of the area covered by the sensor at that distance. How does this affect the detection of narrow obstacles? Discuss its significance.' }
     ]
   },
 
   machine_learning: {
     title: 'Machine Learning / AI',
     questions: [
-      { id: 'q1', type: 'textarea', text: 'How would you replace -999 values in NumPy dataset with median? Why median over mean?' },
-      { id: 'q2', type: 'textarea', text: 'How do you normalize image pixel values (0–255) to [0,1]? Why is it important?' },
-      { id: 'q3', type: 'textarea', text: 'For 100-category feature, would you use one-hot encoding? What are alternatives?' },
-      { id: 'q4', type: 'textarea', text: 'How do you merge two DataFrames keeping only common entries?' },
-      { id: 'q5', type: 'textarea', text: 'How do you detect and handle outliers? Is approach different for tree models?' },
-      { id: 'q6', type: 'textarea', text: 'Model has 90% train accuracy but 54% test accuracy. What problem? Solution?' },
-      { id: 'q7', type: 'textarea', text: 'How would you preprocess categorical data like city and maintenance state?' }
+      { id: 'q1', type: 'textarea', text: 'A sensor dataset stored as a NumPy array contains missing values represented by -999. How would you replace these values with the median of the valid entries? Why might the median be preferred over the mean?' },
+      { id: 'q2', type: 'textarea', text: 'Given a 2D NumPy array representing image pixel values (0–255), how would you normalize it to the range [0, 1]? What are the consequences of not normalizing before training a neural network?' },
+      { id: 'q3', type: 'textarea', text: 'A categorical feature contains 100 unique categories. Would you use one-hot encoding? If not, what alternative techniques would you apply and why?' },
+      { id: 'q4', type: 'textarea', text: 'You are given two DataFrames: df1 (customer IDs and purchases) and df2 (customer IDs and demographics). How would you merge them to retain only the common customers?' },
+      { id: 'q5', type: 'textarea', text: 'How would you detect and handle extreme outliers in a dataset? Would your approach differ for tree-based models? Explain' },
+      { id: 'q6', type: 'textarea', text: 'A model achieves 90% accuracy on training data but only 54% on testing data. What does this indicate, and how would you address it?' },
+      { id: 'q7', type: 'textarea', text: 'You are given a house price dataset with: A column place (e.g., Kolkata, Delhi, Mumbai), A column maintenance_state (e.g., good, moderate, excellent, low). Would you directly feed this data into a machine learning model? If not, what preprocessing steps would you apply? Justify your approach.' }
     ]
   },
 
   automobile: {
     title: 'Automobile',
     questions: [
-      { id: 'q1', type: 'text', text: 'What is the function of a differential gear?' },
-      { id: 'q2', type: 'text', text: 'Why do vehicles use multiple gears?' },
-      { id: 'q3', type: 'text', text: 'Why is first gear used while starting?' },
-      { id: 'q4', type: 'text', text: 'Which mechanism is used in steering?' },
+      { id: 'q1', type: 'text', text: 'What is the function of a differential gear in a vehicle?' },
+      { id: 'q2', type: 'text', text: 'Why do vehicles use multiple gears instead of a single gear?' },
+      { id: 'q3', type: 'text', text: 'Why is first gear used while starting a vehicle?' },
+      { id: 'q4', type: 'text', text: 'Which mechanism is used in a vehicle’s steering system?' },
       { id: 'q5', type: 'text', text: 'Differentiate between petrol and diesel engines.' },
-      { id: 'q6', type: 'text', text: 'Why does fuel efficiency decrease at high speed?' },
-      { id: 'q7', type: 'text', text: 'What is a spoiler and its purpose?' },
-      { id: 'q8', type: 'text', text: 'Disc brakes vs drum brakes – which is better and why?' },
-      { id: 'q9', type: 'text', text: 'Bus vs car turning ability (same mass) – explain.' }
+      { id: 'q6', type: 'text', text: 'Why does fuel efficiency decrease at very high speeds?' },
+      { id: 'q7', type: 'text', text: 'What is a spoiler, and what is its purpose in a vehicle?' },
+      { id: 'q8', type: 'text', text: 'Differentiate between disc brakes and drum brakes. Which is more efficient and why?' },
+      { id: 'q9', type: 'text', text: 'If two vehicles (a bus and a car) have the same mass, which one will turn more easily and why?' }
     ]
   },
 
@@ -96,16 +96,16 @@ export const DOMAIN_QUESTIONS = {
     title: 'Management',
     questions: [
       { id: 'q1', type: 'textarea', text: 'Tell us about yourself.' },
-      { id: 'q2', type: 'textarea', text: 'Why do you want to join SAEINDIA and management domain?' },
-      { id: 'q3', type: 'textarea', text: 'What makes you different from others?' },
-      { id: 'q4', type: 'textarea', text: 'How will you ensure long-term commitment?' },
-      { id: 'q5', type: 'textarea', text: 'Describe a team experience and your role.' },
-      { id: 'q6', type: 'textarea', text: 'Are you in any other club? How will you prioritize?' },
-      { id: 'q7', type: 'textarea', text: 'How will you handle conflicts in a team?' },
-      { id: 'q8', type: 'textarea', text: 'How will you balance academics and club work?' },
-      { id: 'q9', type: 'textarea', text: 'Event vs exam clash – what will you do?' },
-      { id: 'q10', type: 'textarea', text: 'Propose a unique event idea and execution plan.' },
-      { id: 'q11', type: 'textarea', text: 'Rate yourself (Teamwork, Leadership, Communication, Loyalty, Confidence, Honesty, Determination) with justification.' }
+      { id: 'q2', type: 'textarea', text: 'Why do you want to join SAEINDIA and specifically the management domain?' },
+      { id: 'q3', type: 'textarea', text: 'What makes you different from other candidates, and what specific skills do you have that can contribute to the growth of the club?' },
+      { id: 'q4', type: 'textarea', text: 'How will you ensure long-term commitment and active involvement in the club?' },
+      { id: 'q5', type: 'textarea', text: 'Describe a situation where you worked in a team. What was your role and contribution?' },
+      { id: 'q6', type: 'textarea', text: 'Are you currently a part of any other club? If yes, how will you prioritize your clubs?' },
+      { id: 'q7', type: 'textarea', text: 'If you are leading a team during an event and face issues like lack of cooperation, conflicts between members, or someone not completing their assigned work, how would you handle the situation?' },
+      { id: 'q8', type: 'textarea', text: 'How will you manage your club responsibilities alongside your academic workload?' },
+      { id: 'q9', type: 'textarea', text: 'If a club event is scheduled on the same day as your exams, how would you handle the situation?' },
+      { id: 'q10', type: 'textarea', text: 'If you are given responsibility to organize an event for SAEINDIA, propose a unique event idea and explain how you would plan and execute it successfully.' },
+      { id: 'q11', type: 'textarea', text: 'Rate yourself out of 10 in the following areas and briefly justify your ratings:\n   - Teamwork\n   - Leadership\n   - Communication\n   - Loyalty\n   - Confidence\n   - Honesty\n   - Determination' }
     ]
   }
 };
