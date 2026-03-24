@@ -129,6 +129,25 @@ export default function AdminDashboard() {
     }
   };
 
+  /* ── export to pdf ───────────────────────────── */
+  const handleExportPDF = () => {
+    if (!selectedUser) return;
+    const element = document.getElementById('applicant-detail-content');
+    if (!element) return;
+    
+    const opt = {
+      margin:       0.4,
+      filename:     `${selectedUser.name || 'Applicant'}_${DOMAIN_QUESTIONS[selectedDomain]?.title || 'Answers'}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    import('html2pdf.js').then((html2pdf) => {
+      html2pdf.default().set(opt).from(element).save();
+    });
+  };
+
   /* ── export to sheets ────────────────────────── */
   const handleExport = async () => {
     alert('Uploading to Google Sheets…');
@@ -373,10 +392,10 @@ export default function AdminDashboard() {
               <p>Select an applicant to review answers</p>
             </div>
           ) : (
-            <>
+            <div id="applicant-detail-content" style={{ width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-bg, #0a0a0a)' }}>
               {/* Detail Header */}
               <div className="adm-detail-header">
-                <button className="adm-back-btn" onClick={() => setView('users')}>
+                <button className="adm-back-btn" onClick={() => setView('users')} data-html2canvas-ignore="true">
                   <ArrowLeft size={15} /> Back
                 </button>
                 <div className="adm-detail-identity">
@@ -388,9 +407,14 @@ export default function AdminDashboard() {
                     <p className="adm-detail-email">{selectedUser.email}</p>
                   </div>
                 </div>
-                <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
-                  <Trash2 size={14} /><span className="adm-hide-xs"> Delete</span>
-                </button>
+                <div style={{ display: 'flex', gap: '0.5rem' }} data-html2canvas-ignore="true">
+                  <button onClick={handleExportPDF} className="adm-btn adm-btn-primary" style={{ background: 'var(--color-primary)', color: 'white' }} title="Export as PDF">
+                    <Download size={14} /><span className="adm-hide-xs"> Export PDF</span>
+                  </button>
+                  <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
+                    <Trash2 size={14} /><span className="adm-hide-xs"> Delete</span>
+                  </button>
+                </div>
               </div>
 
               {/* Bio Grid */}
@@ -482,7 +506,7 @@ export default function AdminDashboard() {
                   })()
                 )}
               </div>
-            </>
+            </div>
           )}
         </section>
 
