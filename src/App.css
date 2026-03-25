@@ -103,3 +103,45 @@
   align-items: center;
   height: 100vh;
 }
+
+/* ── Responsive adjustments for mobile ── */
+.app-header-admin-btn {
+  padding: 0.5rem 1rem;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    padding: 8px 12px;
+  }
+
+  .app-logo {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .app-title {
+    font-size: 1.05rem;
+  }
+  
+  .app-logo-container {
+    gap: 0.5rem;
+  }
+
+  .user-profile {
+    padding: 0.25rem;
+    gap: 0;
+  }
+
+  .user-email {
+    display: none;
+  }
+
+  .hide-xs {
+    display: none;
+  }
+
+  .app-header .btn-secondary.app-header-admin-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}

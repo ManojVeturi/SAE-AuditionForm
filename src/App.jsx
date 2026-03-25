@@ -89,9 +89,9 @@ function App() {
           <div>
             <button
               onClick={() => navigate("/admin")}
-              className="btn-secondary flex items-center gap-2 px-4 py-2.5"
+              className="btn-secondary app-header-admin-btn flex items-center gap-2"
             >
-              Admin Login
+              <span className="hide-xs">Admin </span>Login
             </button>
           </div>
         )}
