@@ -330,7 +330,7 @@ export default function AdminDashboard() {
               <div className="adm-panel-header">
                 {/* Mobile back to domains */}
                 <button className="adm-back-btn adm-mobile-only" onClick={() => setView('domains')}>
-                  <ArrowLeft size={15} /> Domains
+                  <ArrowLeft size={15} /><span className="adm-hide-xs"> Domains</span>
                 </button>
                 <div className="adm-panel-header-meta">
                   <h3 className="adm-panel-title">{currentDomainMeta?.title}</h3>
@@ -396,7 +396,7 @@ export default function AdminDashboard() {
               {/* Detail Header */}
               <div className="adm-detail-header">
                 <button className="adm-back-btn" onClick={() => setView('users')} data-html2canvas-ignore="true">
-                  <ArrowLeft size={15} /> Back
+                  <ArrowLeft size={15} /><span className="adm-hide-xs"> Back</span>
                 </button>
                 <div className="adm-detail-identity">
                   <div className="adm-detail-avatar">
@@ -411,9 +411,9 @@ export default function AdminDashboard() {
                   <button onClick={handleExportPDF} className="adm-btn adm-btn-primary" style={{ background: 'var(--color-primary)', color: 'white' }} title="Export as PDF">
                     <Download size={14} /><span className="adm-hide-xs"> Export PDF</span>
                   </button>
-                  {/* <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
-                    <Trash2 size={14} /><span> Delete</span>
-                  </button> */}
+                  <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
+                    <Trash2 size={14} /><span className="adm-hide-xs"> Delete</span>
+                  </button>
                 </div>
               </div>
 
