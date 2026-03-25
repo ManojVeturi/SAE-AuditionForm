@@ -57,7 +57,7 @@ export default function Instructions() {
             </li>
             <li>
               <span className="instruction-number">3.</span>
-              <span className="instruction-text"> No tab switching or refreshing (auto-submit if detected).</span>
+              <span className="instruction-text">No tab switching or refreshing (auto-submit if detected).</span>
             </li>
             <li>
               <span className="instruction-number">4.</span>
