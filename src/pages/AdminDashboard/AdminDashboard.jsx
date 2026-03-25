@@ -409,11 +409,11 @@ export default function AdminDashboard() {
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }} data-html2canvas-ignore="true">
                   <button onClick={handleExportPDF} className="adm-btn adm-btn-primary" style={{ background: 'var(--color-primary)', color: 'white' }} title="Export as PDF">
-                    <Download size={14} /><span> Export PDF</span>
+                    <Download size={14} /><span className="adm-hide-xs"> Export PDF</span>
                   </button>
-                  <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
+                  {/* <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
                     <Trash2 size={14} /><span> Delete</span>
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
