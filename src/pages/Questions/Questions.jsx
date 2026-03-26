@@ -16,12 +16,14 @@ export default function Questions() {
   const [error,       setError]       = useState('');
   const [showWarning, setShowWarning] = useState(false);
   const [warnCount,   setWarnCount]   = useState(0);
-  const [guardActive, setGuardActive] = useState(false); // becomes true after 3s delay
+  const [countdown,   setCountdown]   = useState(5); // (kept, not used now)
+  const [isFinal,     setIsFinal]     = useState(false);
+  const [guardActive, setGuardActive] = useState(false);
 
   const answersRef   = useRef({});
   const hasSubmitted = useRef(false);
   const isSubmitting = useRef(false);
-  const warnRef      = useRef(0);
+  const switchCount  = useRef(0);
   const warningTimer = useRef(null);
 
   const selectedDomains = location.state?.selectedDomains || [];
@@ -88,10 +90,8 @@ export default function Questions() {
         }, { merge: true })
       ]);
 
-      // 🔥 SEND TO GOOGLE SHEETS
       for (const domainId of selectedDomains) {
         const flat = buildFlatAnswers(domainId);
-
         await sendToSheets({
           domain: domainId,
           name: userDetails.name,
@@ -106,15 +106,11 @@ export default function Questions() {
         });
       }
 
-      // 🔥 EMAIL SEND
       try {
         await emailjs.send(
           "service_06u2sd9",
           "template_yxwe6s4",
-          {
-            name: userDetails.name || "Candidate",
-            email: userEmail
-          },
+          { name: userDetails.name || "Candidate", email: userEmail },
           "9UdKdWJonqj2mXI8W"
         );
       } catch (err) {
@@ -130,52 +126,78 @@ export default function Questions() {
     }
   }, [selectedDomains, userDetails, navigate, buildFlatAnswers]);
 
-  /* ── activate anti-cheat after 3s so page loads cleanly */
+  /* ── activate anti-cheat after 3s ───────────────────── */
   useEffect(() => {
-    const activateTimer = setTimeout(() => {
-      setGuardActive(true);
-    }, 3000);
-    return () => clearTimeout(activateTimer);
+    const t = setTimeout(() => setGuardActive(true), 3000);
+    return () => clearTimeout(t);
   }, []);
 
-  /* ── attach listeners only after guard is active ─────── */
+  /* ── main anti-cheat listeners ───────────────────────── */
   useEffect(() => {
     if (!guardActive) return;
 
-    const onVisibilityChange = () => {
-      if (document.hidden && !hasSubmitted.current) {
+    const onAway = () => {
+      console.log("TAB SWITCH DETECTED");
+
+      if (hasSubmitted.current) return;
+
+      switchCount.current += 1;
+      const strike = switchCount.current;
+
+      if (strike === 1) {
+        setWarnCount(1);
+        setIsFinal(false);
+        setShowWarning(true);
+
+        clearTimeout(warningTimer.current);
+        warningTimer.current = setTimeout(() => setShowWarning(false), 4000);
+
+      } else if (strike === 2) {
+        setWarnCount(2);
+        setIsFinal(false);
+        setShowWarning(true);
+
+        clearTimeout(warningTimer.current);
+        warningTimer.current = setTimeout(() => setShowWarning(false), 4000);
+
+      } else {
+        // 🔴 3rd → instant submit
+        setWarnCount(3);
+        setIsFinal(true);
         doSubmit(true);
       }
     };
 
-    const onBlur = () => {
+    const onReturn = () => {
       if (hasSubmitted.current) return;
-      warnRef.current += 1;
-      setWarnCount(warnRef.current);
 
-      if (warnRef.current >= 2) {
-        doSubmit(true);
-      } else {
-        setShowWarning(true);
-        clearTimeout(warningTimer.current);
-        warningTimer.current = setTimeout(() => setShowWarning(false), 4000);
-      }
+      // 🚨 Ignore return if warning just triggered (within 1s)
+      setTimeout(() => {
+        if (switchCount.current < 3) {
+          clearTimeout(warningTimer.current);
+          setShowWarning(false);
+        }
+      }, 1000);
+    };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) onAway();
+      else onReturn();
     };
 
     document.addEventListener('visibilitychange', onVisibilityChange);
-    window.addEventListener('blur', onBlur);
 
     return () => {
       document.removeEventListener('visibilitychange', onVisibilityChange);
-      window.removeEventListener('blur', onBlur);
       clearTimeout(warningTimer.current);
     };
+
   }, [guardActive, doSubmit]);
 
   /* ── block keyboard shortcuts ────────────────────────── */
   useEffect(() => {
     const onKeyDown = (e) => {
-      const key = e.key.toLowerCase();
+      const key              = e.key.toLowerCase();
       const ctrlBlocked      = ['c', 'v', 'a', 'x', 'u', 's', 'p'];
       const ctrlShiftBlocked = ['i', 'j', 'c', 'k'];
 
@@ -188,10 +210,8 @@ export default function Questions() {
     return () => document.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  /* ── redirect if no domains ──────────────────────────── */
   if (selectedDomains.length === 0) return <Navigate to="/domains" />;
 
-  /* ── handlers ────────────────────────────────────────── */
   const handleInputChange = (domainId, questionId, value) => {
     const updated = {
       ...answersRef.current,
@@ -210,7 +230,20 @@ export default function Questions() {
     setLoading(false);
   };
 
-  /* ── render ──────────────────────────────────────────── */
+  /* ── warning message ───────────────────────────── */
+  const warningMessage = () => {
+    if (isFinal) {
+      return `🚨 Final strike! Submitting your form...`;
+    }
+    if (warnCount === 1) {
+      return `⚠️ Warning 1/2 — Do not switch tabs.`;
+    }
+    if (warnCount === 2) {
+      return `⚠️ Warning 2/2 — Last chance! Next switch = auto-submit.`;
+    }
+    return '';
+  };
+
   return (
     <div
       className="container animate-fade-in questions-page"
@@ -218,11 +251,10 @@ export default function Questions() {
       onCut={(e)         => e.preventDefault()}
       onContextMenu={(e) => e.preventDefault()}
     >
-      {/* Floating warning toast */}
       {showWarning && (
-        <div className="questions-cheat-warning">
+        <div className={`questions-cheat-warning${isFinal ? ' questions-cheat-final' : ''}`}>
           <ShieldAlert size={18} />
-          <span>⚠️ Warning {warnCount}/2 — Leave again and your form will be auto-submitted!</span>
+          <span>{warningMessage()}</span>
         </div>
       )}
 
@@ -236,12 +268,11 @@ export default function Questions() {
           Please answer the domain-specific questions below honestly.
         </p>
 
-        {/* Integrity notice */}
         <div className="questions-integrity-notice">
           <ShieldAlert size={16} />
           <span>
-            Integrity mode active — switching tabs or windows will auto-submit your form with
-            unanswered questions marked as NULL.
+            Integrity mode active — you get 2 warnings for switching tabs.
+            On the 3rd switch, your form auto-submits instantly.
           </span>
         </div>
 

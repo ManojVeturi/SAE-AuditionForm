@@ -61,6 +61,10 @@ export default function Instructions() {
             </li>
             <li>
               <span className="instruction-number">4.</span>
+              <span className="instruction-text">Close all apps before starting the test.</span>
+            </li>
+            <li>
+              <span className="instruction-number">5.</span>
               <span className="instruction-text">Complete in one sitting.</span>
             </li>
           </ul>
