@@ -59,7 +59,7 @@ export const DOMAIN_QUESTIONS = {
       { id: 'q6', type: 'textarea', text: 'If you were to design a high-speed line-following robot, what modifications would you implement to improve performance and stability?' },
       { id: 'q7', type: 'textarea', text: 'For designing a self-balancing robot, which sensors and control algorithms would you use to minimize error?' },
       { id: 'q8', type: 'textarea', text: 'A self-driving car detects an obstacle 2 meters ahead using an ultrasonic sensor. The car is moving at 5 m/s, and the braking system has a response delay of 0.5 seconds. Will the car stop before hitting the obstacle? Justify your answer.' },
-      { id: 'q9', type: 'textarea', text: 'An ultrasonic sensor has a detection angle of 30°. If the robot is placed 50 cm away from a wall, calculate the width of the area covered by the sensor at that distance. How does this affect the detection of narrow obstacles? Discuss its significance.' },
+      { id: 'q9', type: 'textarea', text: 'If an Arduino acts as the “brain” of a robot, what is the role of a motor driver? Can it be eliminated? If yes, suggest an alternative and justify your answer.' },
       { id: 'q10', type: 'textarea', text: 'An ultrasonic sensor has a detection angle of 30°. If the robot is placed 50 cm away from a wall, calculate the width of the area covered by the sensor at that distance. How does this affect the detection of narrow obstacles? Discuss its significance.' }
     ]
   },
