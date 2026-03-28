@@ -411,9 +411,9 @@ export default function AdminDashboard() {
                   <button onClick={handleExportPDF} className="adm-btn adm-btn-primary" style={{ background: 'var(--color-primary)', color: 'white' }} title="Export as PDF">
                     <Download size={14} /><span className="adm-hide-xs"> Export PDF</span>
                   </button>
-                  <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
+                  {/* <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
                     <Trash2 size={14} /><span className="adm-hide-xs"> Delete</span>
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
