@@ -11,7 +11,7 @@ import './AdminDashboard.css';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-
+  const DELETE_PASSWORD = 'webd@2026';
   const [users,          setUsers]          = useState([]);
   const [loading,        setLoading]        = useState(true);
   const [searchTerm,     setSearchTerm]     = useState('');
@@ -19,6 +19,7 @@ export default function AdminDashboard() {
   const [selectedUser,   setSelectedUser]   = useState(null);
   const [userAnswers,    setUserAnswers]     = useState(null);
   const [loadingAnswers, setLoadingAnswers]  = useState(false);
+  const [exportingDomain, setExportingDomain] = useState(false);
   // view: 'domains' | 'users' | 'detail'
   const [view,           setView]           = useState('domains');
   const [sidebarOpen,    setSidebarOpen]    = useState(false);
@@ -105,6 +106,14 @@ export default function AdminDashboard() {
   /* ── delete user ────────────────────────────── */
   const handleDeleteUser = async () => {
     if (!selectedUser || !db) return;
+
+    const pwd = window.prompt('Enter admin password to delete this user:');
+    if (pwd === null) return; // cancelled
+    if (pwd !== DELETE_PASSWORD) {
+      alert('Incorrect password. Deletion cancelled.');
+      return;
+    }
+
     if (!window.confirm(`Permanently delete ${selectedUser.name || selectedUser.email}?`)) return;
 
     setLoadingAnswers(true);
@@ -129,12 +138,12 @@ export default function AdminDashboard() {
     }
   };
 
-  /* ── export to pdf ───────────────────────────── */
+  /* ── export single user pdf ───────────────────────────── */
   const handleExportPDF = () => {
     if (!selectedUser) return;
     const element = document.getElementById('applicant-detail-content');
     if (!element) return;
-    
+
     const opt = {
       margin:       0.4,
       filename:     `${selectedUser.name || 'Applicant'}_${DOMAIN_QUESTIONS[selectedDomain]?.title || 'Answers'}.pdf`,
@@ -142,10 +151,216 @@ export default function AdminDashboard() {
       html2canvas:  { scale: 2, useCORS: true },
       jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
-    
+
     import('html2pdf.js').then((html2pdf) => {
       html2pdf.default().set(opt).from(element).save();
     });
+  };
+
+  /* ── export whole domain pdf (FIXED) ────────────────────── */
+  const handleExportDomainPDF = async () => {
+    if (!selectedDomain || !db) return;
+    const domainMeta = DOMAIN_QUESTIONS[selectedDomain];
+    if (!domainMeta) return;
+    setExportingDomain(true);
+
+    try {
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF({ unit: 'pt', format: 'letter', orientation: 'portrait' });
+
+      const PAGE_W    = doc.internal.pageSize.getWidth();
+      const PAGE_H    = doc.internal.pageSize.getHeight();
+      const MARGIN    = 40;
+      const CONTENT_W = PAGE_W - MARGIN * 2;
+      const LINE_H    = 15;
+      const BLUE      = [37, 99, 235];
+      const DARK      = [17, 17, 17];
+      const GRAY      = [107, 114, 128];
+      const LIGHT_BG  = [249, 250, 251];
+      const BORDER    = [229, 231, 235];
+
+      let y = MARGIN;
+
+      const checkPage = (needed = 20) => {
+        if (y + needed > PAGE_H - MARGIN) {
+          doc.addPage();
+          y = MARGIN;
+        }
+      };
+
+      const drawText = (text, x, fontSize, color, opts = {}) => {
+        doc.setFontSize(fontSize);
+        doc.setTextColor(...color);
+        if (opts.bold) doc.setFont('helvetica', 'bold');
+        else           doc.setFont('helvetica', 'normal');
+        const lines = doc.splitTextToSize(String(text ?? ''), opts.maxWidth ?? CONTENT_W);
+        lines.forEach(line => {
+          checkPage();
+          doc.text(line, x, y);
+          y += LINE_H * (fontSize / 10);
+        });
+      };
+
+      // ── Cover header ──────────────────────────────
+      drawText(domainMeta.title, MARGIN, 20, DARK, { bold: true });
+      y += 4;
+      drawText(
+        `All Applicant Responses  ·  ${domainUsers.length} applicant${domainUsers.length !== 1 ? 's' : ''}`,
+        MARGIN, 10, GRAY
+      );
+      y += 6;
+      doc.setDrawColor(...BORDER);
+      doc.setLineWidth(1);
+      doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+      y += 16;
+
+      // ── Per-user blocks ───────────────────────────
+      for (let i = 0; i < domainUsers.length; i++) {
+        const u = domainUsers[i];
+
+        // Fetch answers
+        let answers = {};
+        try {
+          const q    = query(collection(db, selectedDomain), where('email', '==', u.email));
+          const snap = await getDocs(q);
+          if (!snap.empty) {
+            const { userId, email, autoSubmitted, submittedAt, ...flat } = snap.docs[0].data();
+            answers = flat;
+          }
+        } catch (e) {
+          console.error('fetch failed for', u.email, e);
+        }
+
+        const submittedDate = u.submittedAt
+          ? new Date(u.submittedAt.seconds * 1000).toLocaleString()
+          : 'Unknown';
+
+        checkPage(120);
+
+        // Card background
+        const cardStartY = y;
+        // We'll patch height after drawing; draw a placeholder rect first
+        const cardX = MARGIN - 8;
+        const cardW = CONTENT_W + 16;
+
+        // ── Name + email ──
+        y += 10;
+        drawText(u.name || 'Unnamed', MARGIN + 4, 13, DARK, { bold: true });
+        drawText(u.email, MARGIN + 4, 10, GRAY);
+        y += 4;
+
+        // ── Bio row ──
+        doc.setDrawColor(...BORDER);
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(MARGIN + 4, y, CONTENT_W - 8, 52, 3, 3, 'FD');
+
+        const bioFields = [
+          ['Roll No',   u.rollNo],
+          ['Branch',    u.branch],
+          ['Year',      u.year],
+          ['WhatsApp',  u.whatsapp],
+          ['Gender',    u.gender],
+          ['Submitted', submittedDate],
+        ];
+        const colW = (CONTENT_W - 8) / 3;
+        bioFields.forEach(([label, value], idx) => {
+          const col  = idx % 3;
+          const row  = Math.floor(idx / 3);
+          const bx   = MARGIN + 4 + col * colW + 6;
+          const by   = y + row * 26 + 10;
+
+          doc.setFontSize(8);
+          doc.setTextColor(...GRAY);
+          doc.setFont('helvetica', 'normal');
+          doc.text(label, bx, by);
+
+          doc.setFontSize(9);
+          doc.setTextColor(...DARK);
+          doc.setFont('helvetica', 'bold');
+          doc.text(String(value || 'N/A'), bx, by + 12);
+        });
+        y += 60;
+
+        // ── Q&A ──
+        domainMeta.questions.forEach((q, idx) => {
+          const answer = answers[q.id];
+
+          checkPage(40);
+
+          // Question label
+          // Small blue badge "Q1"
+          doc.setFillColor(...BLUE);
+          doc.roundedRect(MARGIN + 4, y, 18, 12, 2, 2, 'F');
+          doc.setFontSize(7);
+          doc.setTextColor(255, 255, 255);
+          doc.setFont('helvetica', 'bold');
+          doc.text(`Q${idx + 1}`, MARGIN + 6, y + 8.5);
+
+          doc.setFontSize(10);
+          doc.setTextColor(...DARK);
+          doc.setFont('helvetica', 'bold');
+          const qLines = doc.splitTextToSize(q.text, CONTENT_W - 30);
+          qLines.forEach((line, li) => {
+            if (li === 0) doc.text(line, MARGIN + 26, y + 9);
+            else {
+              y += 13;
+              checkPage();
+              doc.text(line, MARGIN + 26, y + 9);
+            }
+          });
+          y += 16;
+
+          // Answer box
+          const ansText  = answer ? String(answer) : 'No answer provided';
+          const ansColor = answer ? DARK : GRAY;
+          const ansLines = doc.splitTextToSize(ansText, CONTENT_W - 22);
+          const boxH     = ansLines.length * 13 + 12;
+
+          checkPage(boxH + 6);
+          doc.setFillColor(255, 255, 255);
+          doc.setDrawColor(...(answer ? BLUE : BORDER));
+          doc.setLineWidth(0.5);
+          doc.rect(MARGIN + 4, y, CONTENT_W - 8, boxH);
+
+          // Blue left accent bar
+          doc.setFillColor(...(answer ? BLUE : BORDER));
+          doc.rect(MARGIN + 4, y, 3, boxH, 'F');
+
+          doc.setFontSize(9.5);
+          doc.setTextColor(...ansColor);
+          doc.setFont('helvetica', 'normal');
+          ansLines.forEach((line, li) => {
+            doc.text(line, MARGIN + 12, y + 10 + li * 13);
+          });
+          y += boxH + 10;
+        });
+
+        // Now draw card border retroactively
+        const cardEndY = y + 8;
+        doc.setDrawColor(...BORDER);
+        doc.setLineWidth(0.5);
+        doc.setFillColor(...LIGHT_BG);
+        // Draw behind — we can't do this retroactively in jsPDF easily,
+        // so just draw a border rect on top (still visible as card outline)
+        doc.rect(cardX, cardStartY, cardW, cardEndY - cardStartY);
+
+        y += 16;
+
+        // Page break between users (not after last)
+        if (i < domainUsers.length - 1) {
+          doc.addPage();
+          y = MARGIN;
+        }
+      }
+
+      doc.save(`${domainMeta.title}_All_Responses.pdf`);
+
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      alert('Failed to export. Check console.');
+    } finally {
+      setExportingDomain(false);
+    }
   };
 
   /* ── export to sheets ────────────────────────── */
@@ -198,7 +413,6 @@ export default function AdminDashboard() {
       {/* ── Top Bar ── */}
       <header className="adm-topbar">
         <div className="adm-topbar-left">
-          {/* Hamburger — mobile only, shown on users/detail views */}
           {view !== 'domains' && (
             <button className="adm-hamburger" onClick={() => setSidebarOpen(true)} aria-label="Open domains">
               <Menu size={20} />
@@ -336,6 +550,21 @@ export default function AdminDashboard() {
                   <h3 className="adm-panel-title">{currentDomainMeta?.title}</h3>
                   <p className="adm-panel-sub">{filteredDomainUsers.length} applicant{filteredDomainUsers.length !== 1 ? 's' : ''}</p>
                 </div>
+
+                {/* ── Export Domain PDF button — always visible when a domain is selected ── */}
+                <button
+                  onClick={handleExportDomainPDF}
+                  className="adm-btn adm-btn-primary"
+                  disabled={exportingDomain || domainUsers.length === 0}
+                  title={`Export all ${domainUsers.length} responses as PDF`}
+                  style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                >
+                  {exportingDomain
+                    ? <><span className="adm-hide-xs">Exporting…</span></>
+                    : <><Download size={14} /><span className="adm-hide-xs"> Domain PDF</span></>
+                  }
+                </button>
+
                 <div className="adm-search-wrap">
                   <Search size={15} className="adm-search-icon" />
                   <input
@@ -388,8 +617,8 @@ export default function AdminDashboard() {
         <section className={`adm-panel adm-detail-panel ${view === 'detail' ? 'adm-mobile-screen-active adm-detail-open' : ''}`}>
           {!selectedUser ? (
             <div className="adm-placeholder">
-              <UserIcon size={48} className="adm-placeholder-icon" />
-              <p>Select an applicant to review answers</p>
+              <LayoutGrid size={48} className="adm-placeholder-icon" />
+              <p>Select an applicant to view their responses</p>
             </div>
           ) : (
             <div id="applicant-detail-content" style={{ width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-bg, #0a0a0a)' }}>
@@ -411,9 +640,9 @@ export default function AdminDashboard() {
                   <button onClick={handleExportPDF} className="adm-btn adm-btn-primary" style={{ background: 'var(--color-primary)', color: 'white' }} title="Export as PDF">
                     <Download size={14} /><span className="adm-hide-xs"> Export PDF</span>
                   </button>
-                  {/* <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
+                  <button onClick={handleDeleteUser} className="adm-btn adm-btn-danger" title="Delete user">
                     <Trash2 size={14} /><span className="adm-hide-xs"> Delete</span>
-                  </button> */}
+                  </button>
                 </div>
               </div>
 
